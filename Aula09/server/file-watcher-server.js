@@ -2,7 +2,10 @@
 const PORT = 1904;
 const net = require('net')
 
-require('./file-watcher')("../", notifyClients)
+var fw = require('./file-watcher')("../")
+
+fw.on('modify', notifyClients)
+fw.on('modify', console.log)
 
 
 let clients = [];
@@ -53,7 +56,6 @@ function serverListening() {
 
 function notifyClients(msg) {
     clients.forEach(notifyClient);
-
     function notifyClient(sc) {
         sc.write(msg)
     }
