@@ -1,34 +1,48 @@
-"use strict"
-const PORT = 1904;
+
+const PORT = 1904
 const net = require('net')
 
-var fw = require('./file-watcher')("../")
+const PATH_MONITORED = '../'
+var fw = require('./file-watcher')(PATH_MONITORED)
 
 fw.on('modify', notifyClients)
 fw.on('modify', console.log)
 
+Object.prototype.toLdj = function() {
+    return JSON.stringify(this) + '\n'
+}
 
-let clients = [];
+String.prototype.fromLdj = function() {
+    return JSON.parse(this)
+}
 
-const server = net.createServer();
+
+let clients = []
+
+const server = net.createServer()
 server.on('connection', onClientConnect)
 server.on('error', serverError)
 server.listen(PORT, serverListening)
 
-console.log("main code ended")
+console.log('main code ended')
 
 function onClientConnect(sc) {
     clients.push(sc)
     console.log(`Client connected! - ${clients.length}`)
 
     sc.on('data', onClientData)
-    sc.on('end', onClientDisconnect);
+    sc.on('end', onClientDisconnect)
 
 
     function onClientData(data) {
-        data = data.toString();
-        console.log(`Client sent ${data}`)
-        sc.write(`Hello ${data}`)
+        let helloMsg = data.toString().fromLdj();
+        if(helloMsg.type != 'hello') {
+            console.log('Not polite clientes are simply kicked!')
+            sc.end()
+            return
+        }
+        console.log(`Client sent ${helloMsg.message}`)
+        sc.write({type: 'watching', path: PATH_MONITORED}.toLdj())
     }
 
     function onClientDisconnect() {
@@ -55,8 +69,22 @@ function serverListening() {
 
 
 function notifyClients(msg) {
-    clients.forEach(notifyClient);
+    msg.type = 'changing'
+    clients.forEach(notifyClient)
     function notifyClient(sc) {
-        sc.write(msg)
+        let str = msg.toLdj()
+        const str1 = str.substring(0, str.length/2)
+        const str2 = str.substring(str.length/2+1, str.length)
+        
+        sendStr(str1)
+    
+        setTimeout(() => sendStr(str2),10)
+
+
+        function sendStr(str) { 
+            console.log(`sending str ${str}`)
+            sc.write(str)
+        }
+        
     }
 }

@@ -23,7 +23,8 @@ module.exports = function (path) {
             var seferovic = this;
 
             function processFileChanges(et, path) {
-                const msg = `EventType: ${et} on path ${path}`;
+
+                const msg = {eventType: et, file: path, timestamp: Date.now()};
                 console.log(msg);
         
                 seferovic.emit('modify', msg)
