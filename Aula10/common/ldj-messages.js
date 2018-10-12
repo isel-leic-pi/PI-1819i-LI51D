@@ -2,7 +2,6 @@ const EventEmitter = require('events')
 
 
 class LdjMessages extends EventEmitter {
-    
     constructor(dataEmitter) {
         super();
         dataEmitter.on('data', processData)
@@ -11,7 +10,7 @@ class LdjMessages extends EventEmitter {
         const self = this;
         
         function processData(data) {
-            console.log(`client received message ${data}`)
+            console.log(`Received message ${data}`)
             buffer += data.toString();
             
             let idx = buffer.indexOf('\n');
@@ -24,6 +23,12 @@ class LdjMessages extends EventEmitter {
             }
         }
     }
+
+    static create(dataEmitter) {
+        return new LdjMessages(dataEmitter)
+    }
 }
 
 module.exports = LdjMessages;
+
+

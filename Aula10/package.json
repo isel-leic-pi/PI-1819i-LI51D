@@ -1,8 +1,8 @@
 {
-  "name": "Aula09",
+  "name": "file-watcher-service",
   "version": "1.0.0",
   "description": "",
-  "main": "file-watcher-client.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -13,8 +13,7 @@ const client = net.createConnection({ port: PORT }, () => {
     client.write(JSON.stringify({type: 'hello', message: "SLB"}) + '\n');
   });
 
-  const ldj = new LdjMessages(client)
-  ldj.on('message', onServerMessage)
+  LdjMessages.create(client).on('message', onServerMessage)
 
   function onServerMessage(message) {
     console.log(`Server message: `)

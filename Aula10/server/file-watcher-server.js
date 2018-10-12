@@ -4,16 +4,13 @@ const net = require('net')
 
 const PATH_MONITORED = '../'
 var fw = require('./file-watcher')(PATH_MONITORED)
+const LdjMessages = require('../common/ldj-messages')
 
 fw.on('modify', notifyClients)
 fw.on('modify', console.log)
 
 Object.prototype.toLdj = function() {
     return JSON.stringify(this) + '\n'
-}
-
-String.prototype.fromLdj = function() {
-    return JSON.parse(this)
 }
 
 
@@ -30,12 +27,13 @@ function onClientConnect(sc) {
     clients.push(sc)
     console.log(`Client connected! - ${clients.length}`)
 
-    sc.on('data', onClientData)
+    LdjMessages.create(sc).on('message', onClientData)
+
+    //sc.on('data', onClientData)
     sc.on('end', onClientDisconnect)
 
 
-    function onClientData(data) {
-        let helloMsg = data.toString().fromLdj();
+    function onClientData(helloMsg) {
         if(helloMsg.type != 'hello') {
             console.log('Not polite clientes are simply kicked!')
             sc.end()
