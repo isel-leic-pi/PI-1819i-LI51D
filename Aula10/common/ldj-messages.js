@@ -10,7 +10,7 @@ class LdjMessages extends EventEmitter {
         const self = this;
         
         function processData(data) {
-            console.log(`Received message ${data}`)
+            //console.log(`Received message ${data}`)
             buffer += data.toString();
             
             let idx = buffer.indexOf('\n');

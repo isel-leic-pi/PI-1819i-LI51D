@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "start-client": "node ./client/file-watcher-client.js",
+    "start-server": "node ./server/file-watcher-server.js",
+    "pretest": "echo pretest",
+    "test": "mocha",
+    "posttest": "echo posttest"
   },
   "author": "",
   "license": "ISC",
