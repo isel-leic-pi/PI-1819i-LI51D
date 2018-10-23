@@ -1,5 +1,4 @@
 const fs = require('fs')
-const request = require('request')
 const program = require('commander')
 const pkg = require('./package.json') 
 const commands = require('./commands')(program)
@@ -17,11 +16,24 @@ program.
 
 // url command
 program.
-    command('url [path]')
+    command('get [path]')
     .description('generate the URL for the options and path (default is /)')
-    .action(commands.url)
-    
+    .action(commands.get)
 
+
+// create-index command
+program.
+    command('create-index')
+    .alias('ci')
+    .description('create an index')
+    .action(commands.createIndex)
+
+
+program.
+    command('list-indices')
+    .alias('li')
+    .description('get a list of indices in this cluster')
+    .action(commands.listIndices)
 
 
 program.parse(process.argv)
