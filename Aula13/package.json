@@ -1,0 +1,24 @@
+{
+  "name": "esclu-chelas",
+  "version": "1.0.0",
+  "description": "Elasticsearch Command Line Utilities",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isel-leic-pi/PI-1819i-LI51D.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isel-leic-pi/PI-1819i-LI51D/issues"
+  },
+  "homepage": "https://github.com/isel-leic-pi/PI-1819i-LI51D#readme",
+  "dependencies": {
+    "commander": "2.19.0",
+    "request": "2.88.0"
+  }
+}
