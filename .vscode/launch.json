@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/Aula09/server/file-watcher-server.js"
+            "name": "Server Express",
+            "program": "${workspaceFolder}/Aula20/server-express.js"
         }
     ]
 }
