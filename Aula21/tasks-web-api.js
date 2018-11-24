@@ -12,16 +12,20 @@ module.exports = function(router) {
     router.delete('/:tid', deleteTask)
 
     return router
-
 }
-function getAllTasks(req, res) {
+function getAllTasks(req, res, next) {
+    console.log(next)
     setTimeout(() => {
-        res.send('Get all tasks')
+        let last_task = req.cookies['last-task'] || "none"
+        res.send(`Get all tasks. Last acessed task was ${last_task}`)
+        
     }, 2000)
 }
 
 function getTask(req, res) {
-    res.send(`Get a single task with id ${req.params.tid} with query value ${req.query.a}. Full uri: ${req.url} `)
+  let tid = req.params.tid;
+    res.cookie("last-task", tid, {path: '/task'})
+    res.send(`Get a single task with id ${tid} with query value ${req.query.a}. Full uri: ${req.url} `)
   }
 
   function createTask(req, res) {
