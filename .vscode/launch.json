@@ -7,8 +7,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Server Express",
-            "program": "${workspaceFolder}/Aula20/server-express.js"
+            "name": "Node Application",
+            "program": "${workspaceFolder}/Aula22/03-creating-promises.js"
         }
+        
     ]
 }
