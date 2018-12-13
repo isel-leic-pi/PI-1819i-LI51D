@@ -5,6 +5,8 @@ module.exports = function (router, service) {
 
   // List all tasks
   router.get('/', getAllTasks)
+// Search tasks
+  router.get('/search', searchTasks)
   // Shows the details of a task with the specified id
   router.get('/:tid', getTask)
   // Create a new task
@@ -23,6 +25,29 @@ module.exports = function (router, service) {
     try {
       let tasks = await service.getAllTasks()
       res.json(tasks)
+    } catch(e) {
+      next(e)
+    }
+  }
+
+  async function searchTasks(req, res, next) {
+    try {
+      let tasks = await service.getAllTasks()
+      tasks = tasks.filter(matchesSearch)
+      res.json(tasks)
+
+      function matchesSearch(task) {
+          const taskPropNames = Object.getOwnPropertyNames(task)
+          console.log(task)
+          return taskPropNames.every(name => {
+              let res = !req.query[name] || (task[name].includes(req.query[name]))
+              console.log(`${name} - ${res}`)
+              return res;
+            }
+          )
+
+      }
+
     } catch(e) {
       next(e)
     }

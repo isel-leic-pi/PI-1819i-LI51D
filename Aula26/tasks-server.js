@@ -18,7 +18,7 @@ app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
 app.use('/', express.static(path.join(__dirname, "public")))
-app.use('/task', tasks_routes)
+app.use('/api/tasks', tasks_routes)
 
 
 app.listen(PORT, HOST, onListen)
