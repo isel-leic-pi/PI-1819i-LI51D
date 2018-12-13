@@ -17,7 +17,7 @@ var tasks_routes = require('./api/tasks-web-api')(express.Router(), tasks_servic
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
-app.use('/', express.static(path.join(__dirname, "public")))
+app.use('/', express.static(path.join(__dirname, "dist")))
 app.use('/api/tasks', tasks_routes)
 
 
