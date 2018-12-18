@@ -1,5 +1,10 @@
+const Handlebars = require('../node_modules/handlebars/dist/handlebars')
+const tasksSearchResultsTemplate = require('./searchResults.hbs')
+const tasksResultsTemplateCompiled = Handlebars.compile(tasksSearchResultsTemplate)
 
-window.onload = function(event) {
+
+
+window.onload = function (event) {
 
   document.body.addEventListener("click", bodyClickCapturing, true)
   document.body.addEventListener("click", bodyClickBubling, false)
@@ -11,58 +16,48 @@ window.onload = function(event) {
   const results = document.getElementById("results")
 
   search.addEventListener("click", event => { console.log("prevent defaut"); event.preventDefault() }, true)
+  search.onclick = searchClick;
 
+  function searchClick(event) {
+    console.log("searchClick")
+    ajaxSeach()
+  }
 
-  const TEMPLATE_URL = "searchResults.hbs"
-  fetch(TEMPLATE_URL).then(res => res.text()).then(resultsTamplateAvailable)
-
- 
-
-  function resultsTamplateAvailable(template) {
-    const tasksResultsTemplate = Handlebars.compile(template)
-    search.onclick = searchClick;
-
-    function searchClick(event) {
-      console.log("searchClick")
-      ajaxSeach()
-    }
-
-    function ajaxSeach() {
-      const url = `http://localhost:3000/api/tasks/search?id=${id.value}&type=${type.value}&description=${description.value}`
-      fetch(url)
+  function ajaxSeach() {
+    const url = `http://localhost:3000/api/tasks/search?id=${id.value}&type=${type.value}&description=${description.value}`
+    fetch(url)
       .then(processResponse)
       .then(showTaskResultsView)
       .catch(showSearchError)
-    }
-  
-    function processResponse(rsp) {
-      if(!rsp.ok) {
-        throw "error"
-      }
-      console.log("$$$$$")
-      return rsp.json()
-    }
-
-    function showTaskResultsView(tasks) {
-      results.innerHTML = tasksResultsTemplate(tasks)
-    }
-
-    function showSearchError(e) {
-      console.log("####" + e)
-      results.innerHTML = "Search not available. Try again later...";
-
-    }
-  }
-  
-
-  function bodyClickCapturing(event) {
-    console.log("bodyClickCapturing")
-    //event.stopPropagation()
   }
 
-  function bodyClickBubling(event) {
-    console.log("bodyClickBubling")
+  function processResponse(rsp) {
+    if (!rsp.ok) {
+      throw "error"
+    }
+    console.log("$$$$$")
+    return rsp.json()
   }
 
-  
+  function showTaskResultsView(tasks) {
+    results.innerHTML = tasksResultsTemplateCompiled(tasks)
+  }
+
+  function showSearchError(e) {
+    console.log("####" + e)
+    results.innerHTML = "Search not available. Try again later...";
+
+  }
 }
+
+
+function bodyClickCapturing(event) {
+  console.log("bodyClickCapturing")
+  //event.stopPropagation()
+}
+
+function bodyClickBubling(event) {
+  console.log("bodyClickBubling")
+}
+
+
