@@ -1,13 +1,5 @@
-const Handlebars = require('../node_modules/handlebars/dist/handlebars')
-const tasksSearchResultsTemplate = require('./searchResults.hbs')
-const tasksResultsTemplateCompiled = Handlebars.compile(tasksSearchResultsTemplate)
 
-
-
-window.onload = function (event) {
-
-  document.body.addEventListener("click", bodyClickCapturing, true)
-  document.body.addEventListener("click", bodyClickBubling, false)
+module.exports = function (tasksResults) {
 
   const search = document.getElementById("search")
   const id = document.getElementById("id")
@@ -40,7 +32,17 @@ window.onload = function (event) {
   }
 
   function showTaskResultsView(tasks) {
-    results.innerHTML = tasksResultsTemplateCompiled(tasks)
+    results.innerHTML = tasksResults(tasks)
+
+    document.querySelectorAll('#results .card').forEach(handleClick)
+
+    function handleClick(card, idx) {
+      card.onclick = function () {
+          const hash = `#task/${tasks[idx].id}`
+          console.log(hash)
+          window.location.hash = `#task/${tasks[idx].id}`
+      }
+    }
   }
 
   function showSearchError(e) {
@@ -49,15 +51,4 @@ window.onload = function (event) {
 
   }
 }
-
-
-function bodyClickCapturing(event) {
-  console.log("bodyClickCapturing")
-  //event.stopPropagation()
-}
-
-function bodyClickBubling(event) {
-  console.log("bodyClickBubling")
-}
-
 

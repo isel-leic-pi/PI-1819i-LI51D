@@ -22,11 +22,6 @@ module.exports = {
             template: './app/index.html',
             chunks: ['index'],
 
-        }),
-        new HtmlWebpackPlugin({
-            template: './app/tasksSearch.html',
-            chunks: ['index'],
-            filename: 'tasksSearch.html'
         })
     ],
     module: {
