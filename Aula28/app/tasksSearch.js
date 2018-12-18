@@ -34,8 +34,8 @@ module.exports = function (tasksResults) {
   function showTaskResultsView(tasks) {
     results.innerHTML = tasksResults(tasks)
 
+    // Register on the click event for each card result to show the task details
     document.querySelectorAll('#results .card').forEach(handleClick)
-
     function handleClick(card, idx) {
       card.onclick = function () {
           const hash = `#task/${tasks[idx].id}`

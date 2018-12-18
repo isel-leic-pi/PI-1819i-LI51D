@@ -1,8 +1,4 @@
 const Handlebars = require('../node_modules/handlebars/dist/handlebars')
-const welcomeTemplate = require('./templates/welcome.hbs')
-const tasksSearchTemplate = require('./templates/tasksSearch.hbs')
-const tasksSearchResultsTemplate = require('./templates/searchResults.hbs')
-
 
 const nop = function () { }
 const tasksSearchScript = require('./tasksSearch')
@@ -10,15 +6,20 @@ const noView = function () {
   return 'no view'
 }
 
+const compiledTemplates = {
+  welcome: Handlebars.compile(require('./templates/welcome.hbs')),
+  tasksSearch: Handlebars.compile(require('./templates/tasksSearch.hbs')), 
+  tasksSearchResults: Handlebars.compile(require('./templates/searchResults.hbs'))
+}
 
 module.exports = {
   welcome: {
-    view: Handlebars.compile(welcomeTemplate),
+    view: compiledTemplates.welcome,
     script: nop
   },
   tasksSearch: {
-    view: Handlebars.compile(tasksSearchTemplate),
-    script: () => tasksSearchScript(Handlebars.compile(tasksSearchResultsTemplate))
+    view: compiledTemplates.tasksSearch,
+    script: () => tasksSearchScript(compiledTemplates.tasksSearchResults)
   },
   tasksBundles: {
     view: noView,
