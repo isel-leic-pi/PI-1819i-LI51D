@@ -1,0 +1,10 @@
+{
+  "host": "localhost",
+  "port": 3000,
+  "es": {
+    "port": 9200,
+    "host": "localhost",
+    "index": "tasks",
+    "type": "task"
+  }
+}
