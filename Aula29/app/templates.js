@@ -2,14 +2,19 @@ const Handlebars = require('../node_modules/handlebars/dist/handlebars')
 
 const nop = function () { }
 const tasksSearchScript = require('./tasksSearch')
+
 const noView = function () { 
   return 'no view'
 }
 
 const compiledTemplates = {
-  welcome: Handlebars.compile(require('./templates/welcome.hbs')),
-  tasksSearch: Handlebars.compile(require('./templates/tasksSearch.hbs')), 
-  tasksSearchResults: Handlebars.compile(require('./templates/searchResults.hbs'))
+  welcome: syncToAsync(Handlebars.compile(require('./templates/welcome.hbs'))),
+  tasksSearch: syncToAsync(Handlebars.compile(require('./templates/tasksSearch.hbs'))), 
+  tasksSearchResults: syncToAsync(Handlebars.compile(require('./templates/searchResults.hbs')))
+}
+
+async function syncToAsync(syncF) {
+  return syncF()
 }
 
 module.exports = {
@@ -26,7 +31,8 @@ module.exports = {
     script: nop
   },
   task: {
-    view: function() { 
+    view: async function() { 
+      return `no view for task ${arguments[0]} details `
       console.log(`task called with ${arguments[0]}`)
     },
     script: nop

@@ -11,14 +11,19 @@ let PORT = config.port;
 let HOST = config.host;
 
 var tasks_db = require('./dataAccess/tasks-db')(config.es)
+var auth_db = require('./dataAccess/auth-db')(config.es)
 var tasks_service = require('./model/tasks-service')(tasks_db)
-var tasks_routes = require('./api/tasks-web-api')(express.Router(), tasks_service)
+var auth_service = require('./model/auth-service')(auth_db)
+
+var auth_routes = require('./api/auth-web-api')(express.Router(), express.Router(), auth_service)
+var tasks_routes = require('./api/tasks-web-api')(express.Router(), express.Router(), tasks_service)
 
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
 app.use('/', express.static(path.join(__dirname, "dist")))
 app.use('/api/tasks', tasks_routes)
+app.use('/api/auth', auth_routes)
 
 
 app.listen(PORT, HOST, onListen)

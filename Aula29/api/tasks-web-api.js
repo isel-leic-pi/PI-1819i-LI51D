@@ -1,5 +1,5 @@
 
-module.exports = function (router, service) {
+module.exports = function (app, router, service) {
   console.log("####")
   console.log(service)
 

@@ -17,7 +17,7 @@ require('./nav.js')
 
     let viewTemplate = templates[view]
     if(viewTemplate) {
-      mainContent.innerHTML = viewTemplate.view.apply(null, params)
+      mainContent.innerHTML = await viewTemplate.view.apply(null, params)
       viewTemplate.script()
     } else {
       window.location.hash = '#welcome'
