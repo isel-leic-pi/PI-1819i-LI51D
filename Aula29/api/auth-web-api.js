@@ -2,22 +2,24 @@
 
 const passport = require('passport')
 
-const authService = auth.init(es)
+module.exports = function (routers, authService) { 
+    let { global, specific } = routers
 
-module.exports = function (app, router, authService) { 
     passport.serializeUser((user, done) => done(null, user._id))
     passport.deserializeUser((userId, done) => authService
         .getUser(userId)
         .then(user => done(null, user))
         .catch(err => done(err))
     )
-    app.use(passport.initialize())
-    app.use(passport.session())
+    global.use(passport.initialize())
+    global.use(passport.session())
 
-    router.get('/session', getSession)
-    router.post('/login', login)
-    router.post('/logout', logout)
-    router.post('/signup', signup)
+    specific.get('/session', getSession)
+    specific.post('/login', login)
+    specific.post('/logout', logout)
+    specific.post('/signup', signup)
+
+    return routers
 
     function getSession(req, resp, next) {
         const fullname = req.isAuthenticated() ? req.user.fullname : undefined

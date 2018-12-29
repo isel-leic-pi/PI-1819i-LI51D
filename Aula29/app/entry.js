@@ -11,7 +11,7 @@ require('./nav.js')
   window.addEventListener('hashchange', showView);
   showView();
 
-  function showView() {  
+  async function showView() {  
     let [view, ...params] = window.location.hash.split('/')
     view = view.substring(1)
 

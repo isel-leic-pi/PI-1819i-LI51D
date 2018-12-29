@@ -4,7 +4,7 @@ module.exports = function(tasks_db) {
     getAllTasks: getAllTasks
   }
 
-  async function getAllTasks(req, res, next) {
+  async function getAllTasks() {
     return tasks_db.getAllTasks()
   }
 }

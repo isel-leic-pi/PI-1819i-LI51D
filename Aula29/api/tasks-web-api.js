@@ -1,24 +1,23 @@
 
-module.exports = function (app, router, service) {
-  console.log("####")
-  console.log(service)
+module.exports = function (routers, service) {
+  let { global, specific } = routers
 
   // List all tasks
-  router.get('/', getAllTasks)
-// Search tasks
-  router.get('/search', searchTasks)
+  specific.get('/', getAllTasks)
+  // Search tasks
+  specific.get('/search', searchTasks)
   // Shows the details of a task with the specified id
-  router.get('/:tid', getTask)
+  specific.get('/:tid', getTask)
   // Create a new task
-  router.post('/', createTask)
+  specific.post('/', createTask)
   // Update the task with the specified id
-  router.put('/:tid', updateTask)
+  specific.put('/:tid', updateTask)
   // Update the task with the specified id
-  router.delete('/:tid', deleteTask)
+  specific.delete('/:tid', deleteTask)
 
-  router.use(errorHandling)
+  specific.use(errorHandling)
 
-  return router
+  return routers
 
 
   async function getAllTasks(req, res, next) {
@@ -31,6 +30,7 @@ module.exports = function (app, router, service) {
   }
 
   async function searchTasks(req, res, next) {
+    
     try {
       let tasks = await service.getAllTasks()
       tasks = tasks.filter(matchesSearch)
@@ -45,9 +45,7 @@ module.exports = function (app, router, service) {
               return res;
             }
           )
-
       }
-
     } catch(e) {
       next(e)
     }
@@ -65,8 +63,6 @@ module.exports = function (app, router, service) {
 
     console.log(`Body content is:`)
     console.log(req.body)
-
-
   }
 
   function updateTask(req, res) {

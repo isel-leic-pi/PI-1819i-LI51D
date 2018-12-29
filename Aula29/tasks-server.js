@@ -1,3 +1,12 @@
+'use strict'
+
+class Routers {
+  constructor() {
+    this.global  = express.Router()
+    this.specific  = express.Router()
+  }
+}
+
 
 var path = require('path')
 var express = require('express')
@@ -15,15 +24,19 @@ var auth_db = require('./dataAccess/auth-db')(config.es)
 var tasks_service = require('./model/tasks-service')(tasks_db)
 var auth_service = require('./model/auth-service')(auth_db)
 
-var auth_routes = require('./api/auth-web-api')(express.Router(), express.Router(), auth_service)
-var tasks_routes = require('./api/tasks-web-api')(express.Router(), express.Router(), tasks_service)
+var auth_routes = require('./api/auth-web-api')(new Routers(), auth_service)
+var tasks_routes = require('./api/tasks-web-api')(new Routers(), tasks_service)
 
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
 app.use('/', express.static(path.join(__dirname, "dist")))
-app.use('/api/tasks', tasks_routes)
-app.use('/api/auth', auth_routes)
+
+app.use(tasks_routes.global)
+app.use('/api/tasks', tasks_routes.specific)
+
+app.use(auth_routes.global)
+app.use('/api/auth', auth_routes.specific)
 
 
 app.listen(PORT, HOST, onListen)
@@ -40,4 +53,6 @@ function showRequest(req, rsp) {
   console.log(`${req.method} - ${req.url}`)
   next()
 }
+
+
 
