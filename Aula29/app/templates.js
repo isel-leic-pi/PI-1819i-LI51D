@@ -3,7 +3,7 @@ const Handlebars = require('../node_modules/handlebars/dist/handlebars')
 const nop = function () { }
 const tasksSearchScript = require('./tasksSearch')
 
-const noView = function () { 
+const noView = async  function () { 
   return 'no view'
 }
 
@@ -13,8 +13,10 @@ const compiledTemplates = {
   tasksSearchResults: syncToAsync(Handlebars.compile(require('./templates/searchResults.hbs')))
 }
 
-async function syncToAsync(syncF) {
-  return syncF()
+function syncToAsync(syncF) {
+  return async function() {
+    return syncF.apply(this, Array.prototype.slice.call(arguments, 0))
+  }
 }
 
 module.exports = {

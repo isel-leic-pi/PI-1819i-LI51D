@@ -1,17 +1,15 @@
 
 module.exports = function (tasksResults) {
-
   const search = document.getElementById("search")
   const id = document.getElementById("id")
   const type = document.getElementById("type")
   const description = document.getElementById("description")
   const results = document.getElementById("results")
 
-  search.addEventListener("click", event => { console.log("prevent defaut"); event.preventDefault() }, true)
+  search.addEventListener("click", event => { event.preventDefault() }, true)
   search.onclick = searchClick;
 
   function searchClick(event) {
-    console.log("searchClick")
     ajaxSeach()
   }
 
@@ -27,12 +25,12 @@ module.exports = function (tasksResults) {
     if (!rsp.ok) {
       throw "error"
     }
-    console.log("$$$$$")
     return rsp.json()
   }
 
-  function showTaskResultsView(tasks) {
-    results.innerHTML = tasksResults(tasks)
+  async function showTaskResultsView(tasks) {
+    const res = await tasksResults(tasks)
+    results.innerHTML = res
 
     // Register on the click event for each card result to show the task details
     document.querySelectorAll('#results .card').forEach(handleClick)
