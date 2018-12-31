@@ -12,6 +12,7 @@ var path = require('path')
 var express = require('express')
 var morgan = require('morgan')
 var cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
 var app = express()
 
 var config = require('./tasks-config.json')
@@ -22,7 +23,7 @@ let HOST = config.host;
 var tasks_db = require('./dataAccess/tasks-db')(config.es)
 var auth_db = require('./dataAccess/auth-db')(config.es)
 var tasks_service = require('./model/tasks-service')(tasks_db)
-var auth_service = require('./model/auth-service')(auth_db)
+var auth_service = require('./model/auth-service-mock')(auth_db)
 
 var auth_routes = require('./api/auth-web-api')(new Routers(), auth_service)
 var tasks_routes = require('./api/tasks-web-api')(new Routers(), tasks_service)
@@ -30,6 +31,7 @@ var tasks_routes = require('./api/tasks-web-api')(new Routers(), tasks_service)
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
+app.use(expressSession({ secret: 'keyboard cat' }));
 app.use('/', express.static(path.join(__dirname, "dist")))
 
 app.use(tasks_routes.global)
